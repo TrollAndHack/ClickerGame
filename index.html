@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Click That Button!</title>
+  <style>
+    h1 {
+      font-family: 'Cursive', sans-serif;
+      font-size: 48px;
+      color: #00b8d4;
+    }
+  </style>
+</head>
+<body>
+  <h1>Click That Button!</h1>
+  <p>Click the button as many times as you can in 20 seconds:</p>
+  <button id="click-button">Click me!</button>
+  <p>Clicks: <span id="click-count">0</span></p>
+  <p>Time remaining: <span id="time-remaining">20</span> seconds</p>
+  <br>
+  <h2>Leaderboard</h2>
+  <table id="leaderboard">
+    <tr>
+      <th>Name</th>
+      <th>Clicks</th>
+    </tr>
+  </table>
+
+  <script>
+    // Set up variables
+    const clickButton = document.getElementById("click-button");
+    const clickCountSpan = document.getElementById("click-count");
+    const timeRemainingSpan = document.getElementById("time-remaining");
+    const leaderboardTable = document.getElementById("leaderboard");
+    let clicks = 0;
+    let timeRemaining = 20;
+    let timer;
+
+    // Update the click count and time remaining when the button is clicked
+    clickButton.addEventListener("click", () => {
+      clicks++;
+      clickCountSpan.textContent = clicks;
+    });
+
+    // Start the timer
+    timer = setInterval(() => {
+      timeRemaining--;
+      timeRemainingSpan.textContent = timeRemaining;
+      if (timeRemaining <= 0) {
+        clearInterval(timer);
+        clickButton.disabled = true;
+        addToLeaderboard();
+      }
+    }, 1000); // 1000 milliseconds = 1 second
+
+    // Add the player's score to the leaderboard
+    function addToLeaderboard() {
+      let name = prompt("Enter your name:");
+      let row = leaderboardTable.insertRow(-1); // Add a new row to the end of the table
+      let nameCell = row.insertCell(0);
+      let clicksCell = row.insertCell(1);
+      nameCell.innerHTML = name;
+      clicksCell.innerHTML = clicks;
+    }
+  </script>
+</body>
+</html>
