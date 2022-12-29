@@ -1,70 +1,83 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
-  <title>Click That Button!</title>
-  <style>
-    body {
-      background-color: black;
-      color: white;
-    }
-    h1 {
-      font-family: 'Cursive', sans-serif;
-      font-size: 48px;
-      color: #00b8d4;
-    }
-  </style>
+  <title>Clicker Game</title>
 </head>
 <body>
-  <h1>Click That Button!</h1>
-  <p>Click the button as many times as you can in 20 seconds:</p>
-  <button id="click-button">Click me!</button>
-  <p>Clicks: <span id="click-count">0</span></p>
-  <p>Time remaining: <span id="time-remaining">20</span> seconds</p>
-  <br>
+    <style>
+        div {
+            width: 300px;
+            border: 15px solid rgb(0, 0, 0);
+            padding: 50px;
+            margin: 20px;
+          }
+    </style>
+  <h1>HTML Clicker Game</h1>
+  <p>Click the button to earn points.</p>
+  <button onclick="earnPoints()">Click me!</button>
+  <script>
+    let points = 0;
+    let players = [];
+    let scores = [];
+
+    function earnPoints() {
+      points++;
+      document.getElementById("points").innerHTML = points;
+    }
+
+    function addPlayer() {
+      let playerName = prompt("Enter your name:");
+      players.push(playerName);
+      scores[playerName] = 0;
+    }
+
+    function deletePlayer() {
+      let playerName = prompt("Enter the name of the player to delete:");
+      let playerIndex = players.indexOf(playerName);
+      if (playerIndex >= 0) {
+        players.splice(playerIndex, 1);
+        delete scores[playerName];
+      }
+    }
+
+    function updateLeaderboard() {
+      // Clear the current leaderboard
+      let leaderboard = document.getElementById("leaderboard");
+      while (leaderboard.hasChildNodes()) {
+        leaderboard.removeChild(leaderboard.lastChild);
+      }
+
+      // Sort the players array in descending order by their scores
+      players.sort((a, b) => scores[b] - scores[a]);
+
+      // Populate the leaderboard with the current players and their scores
+      for (let i = 0; i < players.length; i++) {
+        let player = players[i];
+        let score = scores[player];
+
+        let row = document.createElement("tr");
+        let playerCell = document.createElement("td");
+        playerCell.appendChild(document.createTextNode(player));
+        row.appendChild(playerCell);
+
+        let scoreCell = document.createElement("td");
+        scoreCell.appendChild(document.createTextNode(score));
+        row.appendChild(scoreCell);
+
+        leaderboard.appendChild(row);
+      }
+    }
+  </script>
+  <div>Points: <p id="points">0</p></div>
   <h2>Leaderboard</h2>
   <table id="leaderboard">
     <tr>
-      <th>Name</th>
-      <th>Clicks</th>
+      <th>Player</th>
+      <th>Points</th>
     </tr>
   </table>
-
-  <script>
-    // Set up variables
-    const clickButton = document.getElementById("click-button");
-    const clickCountSpan = document.getElementById("click-count");
-    const timeRemainingSpan = document.getElementById("time-remaining");
-    const leaderboardTable = document.getElementById("leaderboard");
-    let clicks = 0;
-    let timeRemaining = 20;
-    let timer;
-
-    // Update the click count and time remaining when the button is clicked
-    clickButton.addEventListener("click", () => {
-      clicks++;
-      clickCountSpan.textContent = clicks;
-    });
-
-    // Start the timer
-    timer = setInterval(() => {
-      timeRemaining--;
-      timeRemainingSpan.textContent = timeRemaining;
-      if (timeRemaining <= 0) {
-        clearInterval(timer);
-        clickButton.disabled = true;
-        addToLeaderboard();
-      }
-    }, 1000); // 1000 milliseconds = 1 second
-
-    // Add the player's score to the leaderboard
-    function addToLeaderboard() {
-      let name = prompt("Enter your name:");
-      let row = leaderboardTable.insertRow(-1); // Add a new row to the end of the table
-      let nameCell = row.insertCell(0);
-      let clicksCell = row.insertCell(1);
-      nameCell.innerHTML = name;
-      clicksCell.innerHTML = clicks;
-    }
-  </script>
+  <button onclick="addPlayer()">Add Player</button>
+  <button onclick="deletePlayer()">Delete Player</button>
+  <button onclick="updateLeaderboard()">Update Leaderboard</button>
 </body>
 </html>
