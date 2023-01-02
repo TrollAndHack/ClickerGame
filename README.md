@@ -14,4 +14,4 @@ To play, download "index.html" or on the main page click on the "Code" button, t
 
 Fully HTML Based
 
-© TAH 
+© Copyright 2023 TAH 
